@@ -1,0 +1,17 @@
+# git-ls-files --others --exclude-from=.git/info/exclude
+# Lines that start with '#' are comments.
+bin-debug/*
+bin-release/*
+rsl
+*~
+~*
+defunct
+bin/*
+CVS
+.DS_Store
+.cvsignore
+meetings
+scripts
+sources
+docs
+original-C-dist
