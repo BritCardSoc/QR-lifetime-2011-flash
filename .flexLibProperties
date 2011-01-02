@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <flexLibProperties includeAllClasses="true" version="3">
-  <includeClasses/>
+  <includeClasses>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.DataLoader"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.LoaderDataVO"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.TimeTableRow"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.TimeTable"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.LifetimeRisk"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.LifetimeRiskRow"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.LifetimeRiskTable"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.BaseHazard"/>
+  </includeClasses>
   <includeResources/>
   <namespaceManifests/>
 </flexLibProperties>
