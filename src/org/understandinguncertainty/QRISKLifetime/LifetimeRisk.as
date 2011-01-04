@@ -70,7 +70,8 @@ package org.understandinguncertainty.QRISKLifetime
 			
 			// // do the rest
 			// for (i=1; i < (to-from+1); i++, timeTableIndex+=3, lifetimeRiskIndex+=2) {
-			for(var i:int=1; i < timeTable.length - from; i++) {
+			trace("from = "+from+" looping from 1 to " + (timeTable.length - from -1));
+			for(var i:int=1; i < timeTable.length - from -1; i++) {
 				
 				// basehaz_cvd_0 = *(timeTableIndex+2);
 				// basehaz_death_0 = *(timeTableIndex+1);

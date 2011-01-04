@@ -14,7 +14,10 @@ package org.understandinguncertainty.QRISKLifetime
 			
 			// // cif_cvd
 			//*(lifetimeRiskIndex+1) = *(lifetimeRiskIndex-1) + *(lifetimeRiskIndex-2) * basehaz_cvd_1;
-
+			
+			if(!(a==a && basehaz_cvd_1==basehaz_cvd_1))
+				trace("bad parameters");
+			
 			if(rows.length == 0) {
 				rows.push(new LifetimeRiskRow(a, 0));
 			}
@@ -31,8 +34,7 @@ package org.understandinguncertainty.QRISKLifetime
 
 		public function getRiskAt(index:int):Number
 		{
-			var lastRow:LifetimeRiskRow = rows[index];
-			return lastRow.cif_cvd;
+			return rows[index].cif_cvd;
 		}
 	}
 }

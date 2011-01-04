@@ -36,7 +36,7 @@ package org.understandinguncertainty.QRISKLifetime
 			bmi:Number,
 			ethrisk:int,
 			fh_cvd:int,
-			rati:int,
+			rati:Number,
 			sbp:Number,
 			smoke_cat:int,
 			town:Number
@@ -109,7 +109,7 @@ package org.understandinguncertainty.QRISKLifetime
 			bmi:Number,
 			ethrisk:int,
 			fh_cvd:int,
-			rati:int,
+			rati:Number,
 			sbp:Number,
 			smoke_cat:int,
 			town:Number
@@ -150,7 +150,7 @@ package org.understandinguncertainty.QRISKLifetime
 			a += fh_cvd * -0.4629154246984292800000000;
 			
 			/* Sum from interaction terms */
-			
+			//trace("female.death = "+a);
 			
 			/* Calculate the score itself */
 			return a;

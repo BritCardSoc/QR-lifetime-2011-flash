@@ -73,6 +73,8 @@ package org.understandinguncertainty.QRISKLifetime
 				lifetimeRisk.addEventListener(Event.INIT, function(event:Event):void {
 					lifetimeRisk.addEventListener(Event.COMPLETE, function(event:Event):void {
 						result = lifetimeRisk.result;
+						result.nYearRisk *= 100;
+						result.lifetimeRisk *= 100;
 						dispatchEvent(new Event(Event.COMPLETE));
 					});
 					lifetimeRisk.lifetimeRisk(path, age, a_cvd, a_death, noOfFollowupYears);
