@@ -4,15 +4,9 @@ package org.understandinguncertainty.QRISKLifetime
 
 	public class LifetimeRiskTable
 	{
-		public var rows:Vector.<LifetimeRiskRow>;
+		public var rows:Vector.<LifetimeRiskRow> = new Vector.<LifetimeRiskRow>;
 		public var index:int = 0;
-		
-		public function setFirstRow(a:Number):void
-		{
-			rows = new Vector.<LifetimeRiskRow>;
-			rows.push(new LifetimeRiskRow(a, 0));
-		}
-		
+				
 		public function push(a:Number, basehaz_cvd_1:Number):void
 		{
 			// // S_1
@@ -21,10 +15,14 @@ package org.understandinguncertainty.QRISKLifetime
 			// // cif_cvd
 			//*(lifetimeRiskIndex+1) = *(lifetimeRiskIndex-1) + *(lifetimeRiskIndex-2) * basehaz_cvd_1;
 
-			var lastRow:LifetimeRiskRow = rows[rows.length - 1];
-			rows.push(new LifetimeRiskRow(lastRow.S_1*a, lastRow.cif_cvd + lastRow.S_1 * basehaz_cvd_1));
-		}
-		
+			if(rows.length == 0) {
+				rows.push(new LifetimeRiskRow(a, 0));
+			}
+			else {
+				var lastRow:LifetimeRiskRow = rows[rows.length - 1];
+				rows.push(new LifetimeRiskRow(lastRow.S_1*a, lastRow.cif_cvd + lastRow.S_1 * basehaz_cvd_1));
+			}
+		}		
 		public function get lifetimeRisk():Number
 		{
 			var lastRow:LifetimeRiskRow = rows[rows.length - 1];

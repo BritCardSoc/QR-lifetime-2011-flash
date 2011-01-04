@@ -8,6 +8,7 @@ package org.understandinguncertainty.QRISKLifetime
 	import org.understandinguncertainty.QRISKLifetime.vo.QResultVO;
 	import org.understandinguncertainty.QRISKLifetime.vo.TimeTableRow;
 
+	[Event(name="init", type="flash.events.Event")]
 	[Event(name="complete", type="flash.events.Event")]
 	public class LifetimeRisk extends EventDispatcher
 	{
@@ -15,15 +16,14 @@ package org.understandinguncertainty.QRISKLifetime
 		public function load(path:String):void
 		{
 			var timeTable:TimeTable = new TimeTable();
-			timeTable.addEventListener(Event.COMPLETE, completeHandler);
+			timeTable.addEventListener(Event.COMPLETE, timeTableLoaded);
 			timeTable.load(path);
 		}
 
-		public function completeHandler(event:Event):void
+		public function timeTableLoaded(event:Event):void
 		{
-			dispatchEvent(new Event(Event.COMPLETE));
+			dispatchEvent(new Event(Event.INIT));
 		}
-		
 		
 		/**
 		 * 
@@ -34,7 +34,6 @@ package org.understandinguncertainty.QRISKLifetime
 		 * 
 		 * @param timeTable
 		 * @param from
-		 * @param to
 		 * @param a_cvd
 		 * @param a_death
 		 * @return 
@@ -55,6 +54,7 @@ package org.understandinguncertainty.QRISKLifetime
 			// double basehaz_death_0 = *(timeTableIndex+1);			
 			// double basehaz_cvd_1 = basehaz_cvd_0 * exp(a_cvd);
 			// double basehaz_death_1 = basehaz_death_0 * exp(a_death);
+			timeTable.init(a_cvd, a_death);
 			var baseHazard:BaseHazard = timeTable.getBaseHazardAt(timeTableIndex++);
 			
 			// double a = 1 - basehaz_cvd_1 - basehaz_death_1; 
@@ -63,14 +63,14 @@ package org.understandinguncertainty.QRISKLifetime
 			// // cif_cvd_1
 			// *(lifetimeRiskIndex++)=0;
 			var lifetimeRiskTable:LifetimeRiskTable = new LifetimeRiskTable();
-			lifetimeRiskTable.setFirstRow(1 - baseHazard.cvd_1 - baseHazard.death_1);
+			lifetimeRiskTable.push(1 - baseHazard.cvd_1 - baseHazard.death_1, 0);
 			
 			// // next index
 			// timeTableIndex+=3;
 			
 			// // do the rest
 			// for (i=1; i < (to-from+1); i++, timeTableIndex+=3, lifetimeRiskIndex+=2) {
-			for(var i:int=1; i < timeTable.length; i++) {
+			for(var i:int=1; i < timeTable.length - from; i++) {
 				
 				// basehaz_cvd_0 = *(timeTableIndex+2);
 				// basehaz_death_0 = *(timeTableIndex+1);
@@ -118,6 +118,7 @@ package org.understandinguncertainty.QRISKLifetime
 		 	var lage:int = 95;
 			
 			var timeTable:TimeTable = new TimeTable();
+			timeTable.init(a_cvd, a_death);
 			timeTable.addEventListener(Event.COMPLETE, function(event:Event):void {
 				
 				// double *timeTable;
@@ -170,7 +171,7 @@ package org.understandinguncertainty.QRISKLifetime
 				// *result = nYearRisk;
 				// *(result+1) = lifetimeRisk;
 				result = new QResultVO(nYearRisk, lifetimeRisk);
-				
+				dispatchEvent(new Event(Event.COMPLETE));
 			});
 			
 			timeTable.load(path);

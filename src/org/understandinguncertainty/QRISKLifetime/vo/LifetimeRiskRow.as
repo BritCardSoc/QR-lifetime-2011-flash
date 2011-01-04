@@ -8,7 +8,7 @@ package org.understandinguncertainty.QRISKLifetime.vo
 		public function LifetimeRiskRow(S_1:Number, cif_cvd_1:Number)
 		{
 			this.S_1 = S_1;
-			this.cif_cvd = cif_cvd;
+			this.cif_cvd = cif_cvd_1;
 		}
 	}
 }
