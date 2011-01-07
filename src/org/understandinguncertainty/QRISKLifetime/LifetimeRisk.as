@@ -3,6 +3,7 @@ package org.understandinguncertainty.QRISKLifetime
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
+	import org.understandinguncertainty.QRISKLifetime.support.IntervalTimer;
 	import org.understandinguncertainty.QRISKLifetime.vo.BaseHazard;
 	import org.understandinguncertainty.QRISKLifetime.vo.LifetimeRiskRow;
 	import org.understandinguncertainty.QRISKLifetime.vo.QResultVO;
@@ -70,7 +71,6 @@ package org.understandinguncertainty.QRISKLifetime
 			
 			// // do the rest
 			// for (i=1; i < (to-from+1); i++, timeTableIndex+=3, lifetimeRiskIndex+=2) {
-			trace("from = "+from+" looping from 1 to " + (timeTable.length - from -1));
 			for(var i:int=1; i < timeTable.length - from -1; i++) {
 				
 				// basehaz_cvd_0 = *(timeTableIndex+2);
@@ -103,6 +103,8 @@ package org.understandinguncertainty.QRISKLifetime
 		
 		public var result:QResultVO;
 		
+		private var intervalTimer:IntervalTimer = new IntervalTimer();
+		
 		// void lifetimeRisk(int cage, int sex, double a_cvd, double a_death, int noOfFollowupYears, double *result) {
 		public function lifetimeRisk(path:String, cage:int, a_cvd:Number, a_death:Number, noOfFollowupYears:Number):void 
 		{
@@ -115,12 +117,15 @@ package org.understandinguncertainty.QRISKLifetime
 			// int followupIndex;
 			// double nYearRisk;
 			
+
 			var sage:int = 30;
 		 	var lage:int = 95;
 			
 			var timeTable:TimeTable = new TimeTable();
 			timeTable.init(a_cvd, a_death);
 			timeTable.addEventListener(Event.COMPLETE, function(event:Event):void {
+				
+//				var timeTableLoadTime:int = intervalTimer.readTime("timeTableLoadTime");
 				
 				// double *timeTable;
 				// int arrayNumberOfRows;
@@ -140,8 +145,13 @@ package org.understandinguncertainty.QRISKLifetime
 				// resultArraySize = finishRow-startRow+1;
 				//
 				// resultArray = produceLifetimeRiskTable(timeTable, startRow, finishRow, a_cvd, a_death);
+//				intervalTimer.time("biggest_t1");
 				var startRow:int = timeTable.find_biggest_t_below(cage-sage)+1;
+//				var biggest_t1:int=intervalTimer.readTime("biggest_t1");
+				
+//				intervalTimer.time("riskTable1");
 				var lifetimeRiskTable:LifetimeRiskTable = produceLifetimeRiskTable(timeTable, startRow, a_cvd, a_death);
+//				var riskTable1:int = intervalTimer.readTime("riskTable1");
 				
 				//// get lifetime risk
 				//// this is the last entry in the table!
@@ -165,16 +175,21 @@ package org.understandinguncertainty.QRISKLifetime
 				  	nYearRisk = lifetimeRisk;
 				}
 				else {
+//					intervalTimer.time("biggest_t2");
 				  	var followupRow:int = timeTable.find_biggest_t_below(followupIndex);
+//					var biggest_t2:int = intervalTimer.readTime("biggest_t2");
 					nYearRisk = lifetimeRiskTable.getRiskAt(followupRow-startRow);	
 				}
 				
 				// *result = nYearRisk;
 				// *(result+1) = lifetimeRisk;
 				result = new QResultVO(nYearRisk, lifetimeRisk);
+
+//				trace("bt1", biggest_t1, "prTable", riskTable1, "bt2", biggest_t2, "ttLoadTime", timeTableLoadTime);
 				dispatchEvent(new Event(Event.COMPLETE));
 			});
 			
+//			intervalTimer.time("timeTableLoadTime");
 			timeTable.load(path);
 		}
 	}

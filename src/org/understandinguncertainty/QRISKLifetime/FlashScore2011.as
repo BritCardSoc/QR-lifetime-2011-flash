@@ -4,6 +4,7 @@ package org.understandinguncertainty.QRISKLifetime
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
+	import org.understandinguncertainty.QRISKLifetime.support.IntervalTimer;
 	import org.understandinguncertainty.QRISKLifetime.vo.QResultVO;
 	import org.understandinguncertainty.QRISKLifetime.vo.TimeTableRow;
 
@@ -70,15 +71,19 @@ package org.understandinguncertainty.QRISKLifetime
 					town);
 				
 				var lifetimeRisk:LifetimeRisk = new LifetimeRisk();
+//				var intervalTimer:IntervalTimer = new IntervalTimer();
+
 				lifetimeRisk.addEventListener(Event.INIT, function(event:Event):void {
 					lifetimeRisk.addEventListener(Event.COMPLETE, function(event:Event):void {
 						result = lifetimeRisk.result;
 						result.nYearRisk *= 100;
 						result.lifetimeRisk *= 100;
+//						trace("lifetimeRisk: "+intervalTimer.readTime("lifetimeRisk"));
 						dispatchEvent(new Event(Event.COMPLETE));
 					});
 					lifetimeRisk.lifetimeRisk(path, age, a_cvd, a_death, noOfFollowupYears);
 				});
+//				intervalTimer.time("lifetimeRisk");
 				lifetimeRisk.load(path);
 			}
 		}				

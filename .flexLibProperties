@@ -10,6 +10,7 @@
     <classEntry path="org.understandinguncertainty.QRISKLifetime.LifetimeRiskTable"/>
     <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.BaseHazard"/>
     <classEntry path="org.understandinguncertainty.QRISKLifetime.Female"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.support.IntervalTimer"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

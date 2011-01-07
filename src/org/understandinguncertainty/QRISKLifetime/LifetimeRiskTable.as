@@ -34,6 +34,8 @@ package org.understandinguncertainty.QRISKLifetime
 
 		public function getRiskAt(index:int):Number
 		{
+			if(index < 0)
+				return 0;
 			return rows[index].cif_cvd;
 		}
 	}

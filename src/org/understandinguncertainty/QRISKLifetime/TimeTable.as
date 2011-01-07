@@ -11,19 +11,33 @@ package org.understandinguncertainty.QRISKLifetime
 	[Event(name="complete", type="flash.events.Event")]
 	public class TimeTable extends EventDispatcher
 	{
-		public var rows:Vector.<TimeTableRow>;
+		public static var rows:Vector.<TimeTableRow>;
 		private var exp_a_cvd:Number;
 		private var exp_a_death:Number;
 		
+		public static var paths:Vector.<String> = new Vector.<String>();
+		public static var cachedRows:Vector.<Vector.<TimeTableRow>> = new Vector.<Vector.<TimeTableRow>>();
+				
 		public function load(path:String):void
 		{
+			var pathIndex:int = paths.indexOf(path);
+			if(pathIndex >= 0) {
+				rows = cachedRows[pathIndex];
+				dispatchEvent(new Event(Event.COMPLETE));
+				return;
+			}
+			else {
+				paths.push(path);
+				pathIndex = paths.length - 1;
+				rows = cachedRows[pathIndex] = new Vector.<TimeTableRow>();
+			}
 			var dataLoader:DataLoader = new DataLoader();
 			dataLoader.load(path, function(event:Event):void {
 				if(event.type == Event.COMPLETE) {
 					var urlLoader:URLLoader = event.target as URLLoader;
 					var data:String = urlLoader.data;
 					var lines:Array = data.split(/\r?\n/);
-					rows = new Vector.<TimeTableRow>;
+//					rows = new Vector.<TimeTableRow>;
 					var index:int = 0;
 					for(var i:int=0; i < lines.length; i++) {
 						var line:String = lines[i] as String;
