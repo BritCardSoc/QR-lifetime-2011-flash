@@ -15,7 +15,8 @@ package org.understandinguncertainty.QRISKLifetime
 	{
 		public var outputData:String;
 		public var errorData:String;
-		public var timeTables:Vector.<Vector.<TimeTableRow>>;
+		//public var timeTables:Vector.<Vector.<TimeTableRow>>;
+		public var lifetimeRisk:LifetimeRisk = new LifetimeRisk();
 		
 		public var result:QResultVO;
 		
@@ -30,7 +31,6 @@ package org.understandinguncertainty.QRISKLifetime
 			a_cvd = gr.cvd(p);	
 			a_death = gr.death(p);		
 			
-			var lifetimeRisk:LifetimeRisk = new LifetimeRisk();
 //			var intervalTimer:IntervalTimer = new IntervalTimer();
 
 			lifetimeRisk.addEventListener(Event.INIT, function(event:Event):void {

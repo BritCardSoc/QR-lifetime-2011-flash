@@ -37,7 +37,7 @@ package org.understandinguncertainty.QRISKLifetime.vo
 		 * @param noOfFollowUpYears	<95-age
 		 * 
 		 */
-		public function QParametersVO(
+		function QParametersVO(
 			b_gender:int,
 			b_AF:int,
 			b_ra:int,
@@ -53,7 +53,7 @@ package org.understandinguncertainty.QRISKLifetime.vo
 			town:Number,
 			age:int,
 			noOfFollowUpYears:int
-			):void
+			)
 		{
 			if(b_gender < 0 || b_gender > 1)
 				throw new Error("gender must be 0 (female) or 1 (male)");

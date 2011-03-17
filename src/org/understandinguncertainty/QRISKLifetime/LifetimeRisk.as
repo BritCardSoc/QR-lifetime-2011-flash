@@ -14,6 +14,8 @@ package org.understandinguncertainty.QRISKLifetime
 	public class LifetimeRisk extends EventDispatcher
 	{
 
+		public var lifetimeRiskTable:LifetimeRiskTable;
+		
 		public function load(path:String):void
 		{
 			var timeTable:TimeTable = new TimeTable();
@@ -43,7 +45,7 @@ package org.understandinguncertainty.QRISKLifetime
 		public function produceLifetimeRiskTable(timeTable:TimeTable, 
 												 from:int, 
 												 a_cvd:Number, 
-												 a_death:Number):LifetimeRiskTable
+												 a_death:Number):void
 		{
 			// // S_1, sum(S_1[n-1] * basehaz_cvd_1) 
 			
@@ -63,8 +65,10 @@ package org.understandinguncertainty.QRISKLifetime
 			// *(lifetimeRiskIndex++)=a;
 			// // cif_cvd_1
 			// *(lifetimeRiskIndex++)=0;
-			var lifetimeRiskTable:LifetimeRiskTable = new LifetimeRiskTable();
-			lifetimeRiskTable.push(1 - baseHazard.cvd_1 - baseHazard.death_1, 0);
+			//var lifetimeRiskTable:LifetimeRiskTable = new LifetimeRiskTable();
+			lifetimeRiskTable = new LifetimeRiskTable();
+			
+			lifetimeRiskTable.push(1 - baseHazard.cvd_1 - baseHazard.death_1, 0, 0);
 			
 			// // next index
 			// timeTableIndex+=3;
@@ -84,10 +88,10 @@ package org.understandinguncertainty.QRISKLifetime
 				//*lifetimeRiskIndex=*(lifetimeRiskIndex-2)*a;
 				// // cif_cvd
 				//*(lifetimeRiskIndex+1) = *(lifetimeRiskIndex-1) + *(lifetimeRiskIndex-2) * basehaz_cvd_1;
-				lifetimeRiskTable.push(1 - baseHazard.cvd_1 - baseHazard.death_1, baseHazard.cvd_1);
+				lifetimeRiskTable.push(1 - baseHazard.cvd_1 - baseHazard.death_1, baseHazard.cvd_1, baseHazard.death_1);
 			}
 			
-			return lifetimeRiskTable;
+			//return lifetimeRiskTable;
 		}
 		/*
 		void lifetimeRiskInit(void) {
@@ -150,7 +154,8 @@ package org.understandinguncertainty.QRISKLifetime
 //				var biggest_t1:int=intervalTimer.readTime("biggest_t1");
 				
 //				intervalTimer.time("riskTable1");
-				var lifetimeRiskTable:LifetimeRiskTable = produceLifetimeRiskTable(timeTable, startRow, a_cvd, a_death);
+				//var lifetimeRiskTable:LifetimeRiskTable = 
+				produceLifetimeRiskTable(timeTable, startRow, a_cvd, a_death);
 //				var riskTable1:int = intervalTimer.readTime("riskTable1");
 				
 				//// get lifetime risk

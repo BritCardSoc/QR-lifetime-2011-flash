@@ -7,7 +7,7 @@ package org.understandinguncertainty.QRISKLifetime
 		public var rows:Vector.<LifetimeRiskRow> = new Vector.<LifetimeRiskRow>;
 		public var index:int = 0;
 				
-		public function push(a:Number, basehaz_cvd_1:Number):void
+		public function push(a:Number, basehaz_cvd_1:Number, basehaz_death_1:Number):void
 		{
 			// // S_1
 			//*lifetimeRiskIndex=*(lifetimeRiskIndex-2)*a;
@@ -19,11 +19,13 @@ package org.understandinguncertainty.QRISKLifetime
 				trace("bad parameters");
 			
 			if(rows.length == 0) {
-				rows.push(new LifetimeRiskRow(a, 0));
+				rows.push(new LifetimeRiskRow(a, 0, 0));
 			}
 			else {
 				var lastRow:LifetimeRiskRow = rows[rows.length - 1];
-				rows.push(new LifetimeRiskRow(lastRow.S_1*a, lastRow.cif_cvd + lastRow.S_1 * basehaz_cvd_1));
+				rows.push(new LifetimeRiskRow(lastRow.S_1*a, 
+											lastRow.cif_cvd + lastRow.S_1 * basehaz_cvd_1, 
+											lastRow.cif_death + lastRow.S_1 * basehaz_death_1));
 			}
 		}		
 		public function get lifetimeRisk():Number
