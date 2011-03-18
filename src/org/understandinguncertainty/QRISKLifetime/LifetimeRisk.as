@@ -14,7 +14,7 @@ package org.understandinguncertainty.QRISKLifetime
 	public class LifetimeRisk extends EventDispatcher
 	{
 
-		public var lifetimeRiskTable:LifetimeRiskTable;
+		public var annualRiskTable:LifetimeRiskTable;
 		
 		public function load(path:String):void
 		{
@@ -45,7 +45,7 @@ package org.understandinguncertainty.QRISKLifetime
 		public function produceLifetimeRiskTable(timeTable:TimeTable, 
 												 from:int, 
 												 a_cvd:Number, 
-												 a_death:Number):void
+												 a_death:Number):LifetimeRiskTable
 		{
 			// // S_1, sum(S_1[n-1] * basehaz_cvd_1) 
 			
@@ -65,16 +65,20 @@ package org.understandinguncertainty.QRISKLifetime
 			// *(lifetimeRiskIndex++)=a;
 			// // cif_cvd_1
 			// *(lifetimeRiskIndex++)=0;
-			//var lifetimeRiskTable:LifetimeRiskTable = new LifetimeRiskTable();
-			lifetimeRiskTable = new LifetimeRiskTable();
+			var lifetimeRiskTable:LifetimeRiskTable = new LifetimeRiskTable();
+			annualRiskTable = new LifetimeRiskTable();
+			//lifetimeRiskTable = new LifetimeRiskTable();
 			
 			lifetimeRiskTable.push(1 - baseHazard.cvd_1 - baseHazard.death_1, 0, 0);
+			annualRiskTable.push(1 - baseHazard.cvd_1 - baseHazard.death_1, 0, 0);
 			
 			// // next index
 			// timeTableIndex+=3;
 			
 			// // do the rest
 			// for (i=1; i < (to-from+1); i++, timeTableIndex+=3, lifetimeRiskIndex+=2) {
+			
+			var t:int = 0;
 			for(var i:int=1; i < timeTable.length - from -1; i++) {
 				
 				// basehaz_cvd_0 = *(timeTableIndex+2);
@@ -89,9 +93,17 @@ package org.understandinguncertainty.QRISKLifetime
 				// // cif_cvd
 				//*(lifetimeRiskIndex+1) = *(lifetimeRiskIndex-1) + *(lifetimeRiskIndex-2) * basehaz_cvd_1;
 				lifetimeRiskTable.push(1 - baseHazard.cvd_1 - baseHazard.death_1, baseHazard.cvd_1, baseHazard.death_1);
+				
+				// populate the annual table if we've reached a year boundary
+				var t1:int = timeTable.getTAt(i);
+				if(t1 > t) {
+					t = t1;
+					annualRiskTable.rows[t] = lifetimeRiskTable.rows[i];
+				}
+				
 			}
 			
-			//return lifetimeRiskTable;
+			return lifetimeRiskTable;
 		}
 		/*
 		void lifetimeRiskInit(void) {
@@ -154,7 +166,7 @@ package org.understandinguncertainty.QRISKLifetime
 //				var biggest_t1:int=intervalTimer.readTime("biggest_t1");
 				
 //				intervalTimer.time("riskTable1");
-				//var lifetimeRiskTable:LifetimeRiskTable = 
+				var lifetimeRiskTable:LifetimeRiskTable = 
 				produceLifetimeRiskTable(timeTable, startRow, a_cvd, a_death);
 //				var riskTable1:int = intervalTimer.readTime("riskTable1");
 				
@@ -197,5 +209,42 @@ package org.understandinguncertainty.QRISKLifetime
 //			intervalTimer.time("timeTableLoadTime");
 			timeTable.load(path);
 		}
+
+		public function lifetimeRisk_int(path:String, cage:int, age_int:int, a_cvd:Number, a_death:Number, a_cvd_int:Number, a_death_int:Number, noOfFollowupYears:Number):void 
+		{
+			var sage:int = 30;
+		 	var lage:int = 95;
+			
+			var timeTable:TimeTable = new TimeTable();
+			timeTable.init(a_cvd, a_death);
+			timeTable.addEventListener(Event.COMPLETE, function(event:Event):void {
+				
+				var startRow:int = timeTable.find_biggest_t_below(cage-sage)+1;
+				var intRow:int = timeTable.find_biggest_t_below(age_int-sage)+1;
+				
+				var lifetimeRiskTable:LifetimeRiskTable = 
+				produceLifetimeRiskTable(timeTable, startRow, intRow, a_cvd, a_death, a_cvd_int, a_death_int);
+
+				var lifetimeRisk:Number = lifetimeRiskTable.lifetimeRisk;
+				
+				var followupIndex:int = cage-sage+noOfFollowupYears;
+
+				var nYearRisk:Number;
+				if (followupIndex >= lage-sage) {
+				  	nYearRisk = lifetimeRisk;
+				}
+				else {
+				  	var followupRow:int = timeTable.find_biggest_t_below(followupIndex);
+					nYearRisk = lifetimeRiskTable.getRiskAt(followupRow-startRow);	
+				}
+				
+				result = new QResultVO(nYearRisk, lifetimeRisk);
+
+				dispatchEvent(new Event(Event.COMPLETE));
+			});
+			
+			timeTable.load(path);
+		}
+
 	}
 }

@@ -10,7 +10,7 @@ package org.understandinguncertainty.QRISKLifetime.vo
 		{
 			this.S_1 = S_1;					// survivors
 			this.cif_cvd = cif_cvd_1;		// f ?
-			this.cif_death = cif_death_1;
+			this.cif_death = cif_death_1;	// m
 		}
 	}
 }

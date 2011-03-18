@@ -55,6 +55,9 @@ package org.understandinguncertainty.QRISKLifetime
 				else if(event.type == IOErrorEvent.IO_ERROR) {
 					throw new Error((event as IOErrorEvent).text);
 				}
+				else {
+					throw new Error(event.toString());
+				}
 				// ignore other event types (we aren't listening for them anyway)
 			});
 		}
@@ -85,7 +88,7 @@ package org.understandinguncertainty.QRISKLifetime
 			return -1;
 		}
 		
-		private function getTAt(index:int):Number
+		public function getTAt(index:int):Number
 		{
 			return rows[index].t;
 		}
