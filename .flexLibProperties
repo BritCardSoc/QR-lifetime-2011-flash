@@ -2,15 +2,20 @@
 <flexLibProperties includeAllClasses="true" version="3">
   <includeClasses>
     <classEntry path="org.understandinguncertainty.QRISKLifetime.DataLoader"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.LoaderDataVO"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.TimeTableRow"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.TimeTable"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.LifetimeRisk"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.LifetimeRiskRow"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.LifetimeRiskTable"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.BaseHazard"/>
     <classEntry path="org.understandinguncertainty.QRISKLifetime.Female"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.FlashScore2011"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.LifetimeRisk"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.LifetimeRiskTable"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.Male"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.TimeTable"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.interfaces.IGenderRisks"/>
     <classEntry path="org.understandinguncertainty.QRISKLifetime.support.IntervalTimer"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.BaseHazard"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.LifetimeRiskRow"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.LoaderDataVO"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.QParametersVO"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.QResultVO"/>
+    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.TimeTableRow"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

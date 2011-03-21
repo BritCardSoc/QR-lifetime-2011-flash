@@ -17,7 +17,7 @@ package org.understandinguncertainty.QRISKLifetime
 		
 		public static var paths:Vector.<String> = new Vector.<String>();
 		public static var cachedRows:Vector.<Vector.<TimeTableRow>> = new Vector.<Vector.<TimeTableRow>>();
-				
+
 		public function load(path:String):void
 		{
 			var pathIndex:int = paths.indexOf(path);
@@ -37,7 +37,7 @@ package org.understandinguncertainty.QRISKLifetime
 					var urlLoader:URLLoader = event.target as URLLoader;
 					var data:String = urlLoader.data;
 					var lines:Array = data.split(/\r?\n/);
-//					rows = new Vector.<TimeTableRow>;
+
 					var index:int = 0;
 					for(var i:int=0; i < lines.length; i++) {
 						var line:String = lines[i] as String;
@@ -49,6 +49,64 @@ package org.understandinguncertainty.QRISKLifetime
 						rows[index++] = new TimeTableRow(fields[1], fields[2], fields[3]);
 					}
 					
+					// dispatch completion event 
+					dispatchEvent(new Event(Event.COMPLETE));
+				}
+				else if(event.type == IOErrorEvent.IO_ERROR) {
+					throw new Error((event as IOErrorEvent).text);
+				}
+				else {
+					throw new Error(event.toString());
+				}
+				// ignore other event types (we aren't listening for them anyway)
+			});
+		}
+		
+			
+		// same as load, but we cache annually rather than on every datapoint
+		public function quickLoad(path:String):void
+		{
+			var pathIndex:int = paths.indexOf(path);
+			if(pathIndex >= 0) {
+				rows = cachedRows[pathIndex];
+				dispatchEvent(new Event(Event.COMPLETE));
+				return;
+			}
+			else {
+				paths.push(path);
+				pathIndex = paths.length - 1;
+				rows = cachedRows[pathIndex] = new Vector.<TimeTableRow>();
+			}
+			var dataLoader:DataLoader = new DataLoader();
+			dataLoader.load(path, function(event:Event):void {
+				if(event.type == Event.COMPLETE) {
+					var urlLoader:URLLoader = event.target as URLLoader;
+					var data:String = urlLoader.data;
+					var lines:Array = data.split(/\r?\n/);
+					
+					var index:int = 0;
+					var sum_cvd:Number = 0;
+					var sum_death:Number = 0;
+					for(var i:int=0; i < lines.length; i++) {
+						var line:String = lines[i] as String;
+						if(line.match(/\s*#/))
+							continue;
+						var fields:Array = line.split(/\s*,\s*/);
+						var sex:Number = fields[0];
+						if(!(sex == sex)) continue; // efficient test for NaN
+						
+						if(Math.floor(Number(fields[1])) > index || i+1 == lines.length) {
+							rows[index] = new TimeTableRow(index, sum_death, sum_cvd);
+							index++;
+							sum_death = Number(fields[2]);
+							sum_cvd = Number(fields[3]);
+						}
+						else {
+							sum_death += Number(fields[2]);
+							sum_cvd += Number(fields[3]);
+						}
+					}
+						
 					// dispatch completion event 
 					dispatchEvent(new Event(Event.COMPLETE));
 				}
