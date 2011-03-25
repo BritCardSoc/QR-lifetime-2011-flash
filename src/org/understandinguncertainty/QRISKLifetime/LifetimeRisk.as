@@ -52,30 +52,34 @@ package org.understandinguncertainty.QRISKLifetime
 			var timeTableIndex:int = from;
 			
 			timeTable.init(a_cvd, a_death);
-			var baseHazard:BaseHazard = timeTable.getBaseHazardAt(timeTableIndex++);
+
+			var t0:int = timeTable.getTAt(timeTableIndex);
 			
 
 			var lifetimeRiskTable:LifetimeRiskTable = new LifetimeRiskTable();
 			annualRiskTable = new LifetimeRiskTable();
 			
-			lifetimeRiskTable.push(1 - baseHazard.cvd_1 - baseHazard.death_1, 0, 0);
-			annualRiskTable.push(1 - baseHazard.cvd_1 - baseHazard.death_1, 0, 0);
-						
-			var t:int = 0;
-			for(var i:int=1; i < timeTable.length - from -1; i++) {
+			var t:int = t0-1;
+			
+			for(var i:int=0; i < timeTable.length - from - 1; i++) {			// why -1 ????
 				
-				baseHazard = timeTable.getBaseHazardAt(timeTableIndex++);
+				var baseHazard:BaseHazard = timeTable.getBaseHazardAt(timeTableIndex);
 				
 				lifetimeRiskTable.push(1 - baseHazard.cvd_1 - baseHazard.death_1, baseHazard.cvd_1, baseHazard.death_1);
 				
 				// populate the annual table if we've reached a year boundary
-				var t1:int = timeTable.getTAt(i);
+				var t1:int = timeTable.getTAt(timeTableIndex);
 				if(t1 > t) {
 					t = t1;
-					annualRiskTable.rows[t] = lifetimeRiskTable.rows[i];
+					annualRiskTable.rows[t-t0] = i > 0 ? lifetimeRiskTable.rows[i-1] : new LifetimeRiskRow(1,0,0);
+//					trace("annual[",t,"]=life[",i,"]=",annualRiskTable.getRiskAt(t-t0));
 				}
 				
+				timeTableIndex++;
 			}
+			
+			// put the last annual row in - we may not have reached a t boundary in the loop
+			annualRiskTable.rows[t-t0 + 1] = i > 0 ? lifetimeRiskTable.rows[i-1] : new LifetimeRiskRow(1,0,0);			
 			
 			return lifetimeRiskTable;
 		}
@@ -112,9 +116,15 @@ package org.understandinguncertainty.QRISKLifetime
 				}
 				else {
 				  	var followupRow:int = timeTable.find_biggest_t_below(followupIndex);
+//					trace("lifeTimeIndex for nYear ", followupIndex, " is: ", followupRow-startRow, " risk=", lifetimeRiskTable.getRiskAt(followupRow-startRow));
 					nYearRisk = lifetimeRiskTable.getRiskAt(followupRow-startRow);	
 				}
 				
+/*				trace("annual table when nyearRisk=",nYearRisk," lifetime=",lifetimeRisk);
+				for(var i:int = 0; i < annualRiskTable.rows.length; i++) {
+					trace(i, ": ", annualRiskTable.rows[i].cif_cvd);
+				}
+*/				
 				// set summary result
 				result = new QResultVO(nYearRisk, lifetimeRisk);
 
