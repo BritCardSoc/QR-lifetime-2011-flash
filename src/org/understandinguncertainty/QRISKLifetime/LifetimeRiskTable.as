@@ -40,5 +40,12 @@ package org.understandinguncertainty.QRISKLifetime
 				return 0;
 			return rows[index].cif_cvd;
 		}
+		
+		public function getHazardAt(index:int):Number
+		{
+			if(index < 0)
+				return 0;
+			return (rows[index+1].cif_cvd - rows[index].cif_cvd)/rows[index].S_1;
+		}
 	}
 }

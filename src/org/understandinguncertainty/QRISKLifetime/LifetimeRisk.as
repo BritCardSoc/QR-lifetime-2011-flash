@@ -14,7 +14,7 @@ package org.understandinguncertainty.QRISKLifetime
 	public class LifetimeRisk extends EventDispatcher
 	{
 		// Risk results will be placed in this annual table.
-		public var annualRiskTable:LifetimeRiskTable;
+		private var annualRiskTable:LifetimeRiskTable;
 		
 		public function load(path:String):void
 		{
@@ -126,7 +126,7 @@ package org.understandinguncertainty.QRISKLifetime
 				}
 */				
 				// set summary result
-				result = new QResultVO(nYearRisk, lifetimeRisk);
+				result = new QResultVO(nYearRisk, lifetimeRisk, null, annualRiskTable);
 
 				dispatchEvent(new Event(Event.COMPLETE));
 			});

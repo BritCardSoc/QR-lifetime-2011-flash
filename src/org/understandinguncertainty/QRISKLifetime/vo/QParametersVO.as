@@ -52,39 +52,42 @@ package org.understandinguncertainty.QRISKLifetime.vo
 			smoke_cat:int,
 			town:Number,
 			age:int,
-			noOfFollowUpYears:int
+			noOfFollowUpYears:int,
+			checkRange:Boolean = true
 			)
 		{
-			if(b_gender < 0 || b_gender > 1)
-				throw new Error("gender must be 0 (female) or 1 (male)");
-			if(b_AF < 0 || b_AF > 1)
-				throw new Error("atrial fibrillation must be 0 or 1");
-			if(b_ra < 0 || b_ra > 1)
-				throw new Error("rheumatoid arthritis must be 0 or 1");
-			if(b_renal < 0 || b_renal > 1)
-				throw new Error("chronic kidney disease must be 0 or 1");
-			if(b_treatedhyp < 0 || b_treatedhyp > 1)
-				throw new Error("treated hypertension must be 0 or 1");
-			if(b_type2 < 0 || b_type2 > 1)
-				throw new Error("type 2 diabetes must be 0 or 1");
-			if(bmi < 20 || bmi > 40)
-				throw new Error("body mass index must be in range 20 to 40");
-			if(ethRisk < 1 || ethRisk > 9)
-				throw new Error("ethnic risk category must be in range 1 to 9");
-			if(fh_cvd < 0 || fh_cvd > 1)
-				throw new Error("family history of CVD must be 0 or 1");
-			if(rati < 1 || rati > 12)
-				throw new Error("cholesterol ratio must be in range 1 to 12");
-			if(sbp < 70 || sbp > 210)
-				throw new Error("systolic blood pressure must be in range 70 to 210");
-			if(smoke_cat < 0 || smoke_cat > 4)
-				throw new Error("smoking category must be in range 0 to 4");
-			if(town < -7 || town > 11)
-				throw new Error("townsend score must be in range -7 to 11");
-			if(age < 30 || age > 84)
-				throw new Error("age must be between 30 and 84");
-			if(noOfFollowUpYears < 0 || noOfFollowUpYears + age > 95)
-				throw new Error("age must be between 0 and (95-age)");
+			if(checkRange) {
+				if(b_gender < 0 || b_gender > 1)
+					throw new Error("gender must be 0 (female) or 1 (male)");
+				if(b_AF < 0 || b_AF > 1)
+					throw new Error("atrial fibrillation must be 0 or 1");
+				if(b_ra < 0 || b_ra > 1)
+					throw new Error("rheumatoid arthritis must be 0 or 1");
+				if(b_renal < 0 || b_renal > 1)
+					throw new Error("chronic kidney disease must be 0 or 1");
+				if(b_treatedhyp < 0 || b_treatedhyp > 1)
+					throw new Error("treated hypertension must be 0 or 1");
+				if(b_type2 < 0 || b_type2 > 1)
+					throw new Error("type 2 diabetes must be 0 or 1");
+				if(bmi < 20 || bmi > 40)
+					throw new Error("body mass index must be in range 20 to 40");
+				if(ethRisk < 1 || ethRisk > 9)
+					throw new Error("ethnic risk category must be in range 1 to 9");
+				if(fh_cvd < 0 || fh_cvd > 1)
+					throw new Error("family history of CVD must be 0 or 1");
+				if(rati < 1 || rati > 12)
+					throw new Error("cholesterol ratio must be in range 1 to 12");
+				if(sbp < 70 || sbp > 210)
+					throw new Error("systolic blood pressure must be in range 70 to 210");
+				if(smoke_cat < 0 || smoke_cat > 4)
+					throw new Error("smoking category must be in range 0 to 4");
+				if(town < -7 || town > 11)
+					throw new Error("townsend score must be in range -7 to 11");
+				if(age < 30 || age > 84)
+					throw new Error("age must be between 30 and 84");
+				if(noOfFollowUpYears < 0 || noOfFollowUpYears + age > 95)
+					throw new Error("age must be between 0 and (95-age)");
+			}
 			
 			this.b_gender = b_gender;
 			this.b_AF = b_AF;
@@ -101,6 +104,16 @@ package org.understandinguncertainty.QRISKLifetime.vo
 			this.town = town;
 			this.age = age;
 			this.noOfFollowUpYears = noOfFollowUpYears;
+		}
+		
+		static public function upperLimits():QParametersVO
+		{
+			return new QParametersVO(1,1,1,1,1,1,40,9,1,12,210,4,11,84,65, false);
+		}
+		
+		static public function lowerLimits():QParametersVO
+		{
+			return new QParametersVO(0,0,0,0,0,0,20,1,0,1,70,0,-7,30,0, false);
 		}
 		
 		public function clone():QParametersVO

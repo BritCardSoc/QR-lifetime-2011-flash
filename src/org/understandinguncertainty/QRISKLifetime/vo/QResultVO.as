@@ -1,5 +1,7 @@
 package org.understandinguncertainty.QRISKLifetime.vo
 {
+	import org.understandinguncertainty.QRISKLifetime.LifetimeRiskTable;
+
 	/**
 	 * QRisk lifetime result value object.
 	 * 
@@ -16,11 +18,13 @@ package org.understandinguncertainty.QRISKLifetime.vo
 		public var nYearRisk:Number;
 		public var lifetimeRisk:Number;
 		public var error:Error;
+		public var annualRiskTable:LifetimeRiskTable;
 		
-		public function QResultVO(nYearRisk:Number, lifetimeRisk:Number, error:Error=null)
+		public function QResultVO(nYearRisk:Number, lifetimeRisk:Number, error:Error=null, annualRiskTable: LifetimeRiskTable = null)
 		{
 			this.nYearRisk = nYearRisk;
 			this.lifetimeRisk = lifetimeRisk;
+			this.annualRiskTable = annualRiskTable;
 			this.error = error;
 		}
 	}
