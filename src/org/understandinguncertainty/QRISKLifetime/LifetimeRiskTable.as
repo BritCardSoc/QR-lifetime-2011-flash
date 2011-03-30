@@ -27,7 +27,9 @@ package org.understandinguncertainty.QRISKLifetime
 											lastRow.cif_cvd + lastRow.S_1 * basehaz_cvd_1, 
 											lastRow.cif_death + lastRow.S_1 * basehaz_death_1));
 			}
-		}		
+		}
+		
+		
 		public function get lifetimeRisk():Number
 		{
 			var lastRow:LifetimeRiskRow = rows[rows.length - 1];

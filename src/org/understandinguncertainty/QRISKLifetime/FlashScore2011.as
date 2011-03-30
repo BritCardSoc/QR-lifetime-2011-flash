@@ -19,6 +19,7 @@ package org.understandinguncertainty.QRISKLifetime
 		public var lifetimeRisk:LifetimeRisk = new LifetimeRisk();
 		
 		public var result:QResultVO;
+		public var result_int:QResultVO;
 		
 		public function calculateScore(path:String, p:QParametersVO):void
 		{
@@ -46,6 +47,50 @@ package org.understandinguncertainty.QRISKLifetime
 //			intervalTimer.time("lifetimeRisk");
 			lifetimeRisk.load(path);
 
-		}		
+		}
+		
+		/**
+		 * 
+		 * @param path 
+		 * 		Path to lifetable data
+		 * @param p
+		 * 		QParameters without intervention
+		 * @param p_int
+		 * 		QParameters with intervention. NB The age field is used to indicate the start of the intervention
+		 * 		and so p_int.age >= p.age.
+		 * 
+		 */
+		public function calculateScoreWithInterventions(path:String, p:QParametersVO, p_int:QParametersVO):void
+		{
+			outputData = "";
+			errorData = "";
+			var a_cvd:Number;
+			var a_death:Number;
+			var a_cvd_int:Number;
+			var a_death_int:Number;
+			
+			var gr:IGenderRisks = (p.b_gender == 0) ? new Female() : new Male();
+			a_cvd = gr.cvd(p);	
+			a_death = gr.death(p);		
+			a_cvd_int = gr.cvd(p_int);	
+			a_death_int = gr.death(p_int);		
+			
+			//			var intervalTimer:IntervalTimer = new IntervalTimer();
+			
+			lifetimeRisk.addEventListener(Event.INIT, function(event:Event):void {
+				lifetimeRisk.addEventListener(Event.COMPLETE, function(event:Event):void {
+					result = lifetimeRisk.result;
+					result.nYearRisk *= 100;
+					result.lifetimeRisk *= 100;
+					
+					result_int = result;
+					//					trace("lifetimeRisk: "+intervalTimer.readTime("lifetimeRisk"));
+					dispatchEvent(new Event(Event.COMPLETE));
+				});
+				lifetimeRisk.lifetimeRisk_int(path, p.age, p_int.age, a_cvd, a_death, a_cvd_int, a_death_int, p.noOfFollowUpYears);
+			});
+			//			intervalTimer.time("lifetimeRisk");
+			lifetimeRisk.load(path);			
+		}
 	}
 }

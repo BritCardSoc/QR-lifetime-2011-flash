@@ -64,6 +64,10 @@ package org.understandinguncertainty.QRISKLifetime
 		
 			
 		// same as load, but we cache annually rather than on every datapoint
+		//
+		// not used
+		//
+		/*
 		public function quickLoad(path:String):void
 		{
 			var pathIndex:int = paths.indexOf(path);
@@ -91,8 +95,9 @@ package org.understandinguncertainty.QRISKLifetime
 						var line:String = lines[i] as String;
 						if(line.match(/\s*#/))
 							continue;
-						var fields:Array = line.split(/\s*,\s*/);
-						var sex:Number = fields[0];
+*/
+//						var fields:Array = line.split(/\s*,\s*/);
+/*						var sex:Number = fields[0];
 						if(!(sex == sex)) continue; // efficient test for NaN
 						
 						if(Math.floor(Number(fields[1])) > index || i+1 == lines.length) {
@@ -119,7 +124,8 @@ package org.understandinguncertainty.QRISKLifetime
 				// ignore other event types (we aren't listening for them anyway)
 			});
 		}
-		
+		*/
+			
 		public function init(a_cvd:Number, a_death:Number):void
 		{
 			exp_a_cvd = Math.exp(a_cvd);
