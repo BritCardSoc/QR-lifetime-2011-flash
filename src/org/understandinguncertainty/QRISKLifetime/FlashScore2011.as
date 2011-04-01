@@ -19,7 +19,6 @@ package org.understandinguncertainty.QRISKLifetime
 		public var lifetimeRisk:LifetimeRisk = new LifetimeRisk();
 		
 		public var result:QResultVO;
-		public var result_int:QResultVO;
 		
 		public function calculateScore(path:String, p:QParametersVO):void
 		{
@@ -83,7 +82,6 @@ package org.understandinguncertainty.QRISKLifetime
 					result.nYearRisk *= 100;
 					result.lifetimeRisk *= 100;
 					
-					result_int = result;
 					//					trace("lifetimeRisk: "+intervalTimer.readTime("lifetimeRisk"));
 					dispatchEvent(new Event(Event.COMPLETE));
 				});

@@ -19,12 +19,17 @@ package org.understandinguncertainty.QRISKLifetime.vo
 		public var lifetimeRisk:Number;
 		public var error:Error;
 		public var annualRiskTable:LifetimeRiskTable;
+		public var annualRiskTable_int:LifetimeRiskTable;
 		
-		public function QResultVO(nYearRisk:Number, lifetimeRisk:Number, error:Error=null, annualRiskTable: LifetimeRiskTable = null)
+		public function QResultVO(nYearRisk:Number, lifetimeRisk:Number, error:Error=null, 
+								  annualRiskTable: LifetimeRiskTable = null,
+								  annualRiskTable_int: LifetimeRiskTable = null
+		)
 		{
 			this.nYearRisk = nYearRisk;
 			this.lifetimeRisk = lifetimeRisk;
 			this.annualRiskTable = annualRiskTable;
+			this.annualRiskTable_int = annualRiskTable_int;
 			this.error = error;
 		}
 	}

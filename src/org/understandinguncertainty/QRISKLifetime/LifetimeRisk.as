@@ -13,11 +13,9 @@ package org.understandinguncertainty.QRISKLifetime
 	[Event(name="complete", type="flash.events.Event")]
 	public class LifetimeRisk extends EventDispatcher
 	{
-		// Risk results will be placed in this annual table.
-		private var annualRiskTable:LifetimeRiskTable;
+		// summary result
+		public var result:QResultVO;
 		
-		// Risks with intervention will be placed here
-		private var annualRiskTable_int:LifetimeRiskTable;
 		
 		public function load(path:String):void
 		{
@@ -61,13 +59,10 @@ package org.understandinguncertainty.QRISKLifetime
 
 			var t0:int = timeTable.getTAt(timeTableIndex);
 			
-
-			var lifetimeRiskTable:LifetimeRiskTable = new LifetimeRiskTable();
-
-			annualRiskTable = new LifetimeRiskTable();
-			var lastRow:LifetimeRiskRow = new LifetimeRiskRow(1,0,0);
+			var annualRiskTable:LifetimeRiskTable = new LifetimeRiskTable();
+			var lastRow:LifetimeRiskRow;
 			var newRow:LifetimeRiskRow;
-			var nYearRisk:Number;
+			var nYearRisk:Number = 0;
 			
 			var t:int = t0-1;
 			
@@ -75,51 +70,36 @@ package org.understandinguncertainty.QRISKLifetime
 				
 				var baseHazard:BaseHazard = timeTable.getBaseHazardAt(timeTableIndex);
 				
-				newRow = new LifetimeRiskRow(lastRow.S_1*(1 - baseHazard.cvd_1 - baseHazard.death_1), 
-					lastRow.cif_cvd + lastRow.S_1 * baseHazard.cvd_1, 
-					lastRow.cif_death + lastRow.S_1 * baseHazard.death_1);
+				if(i==0) {
+					lastRow = new LifetimeRiskRow(1 - baseHazard.cvd_1 - baseHazard.death_1, 0, 0);
+				}
+				else {
+					newRow = new LifetimeRiskRow(lastRow.S_1*(1 - baseHazard.cvd_1 - baseHazard.death_1), 
+						lastRow.cif_cvd + lastRow.S_1 * baseHazard.cvd_1, 
+						lastRow.cif_death + lastRow.S_1 * baseHazard.death_1);
+					
+					lastRow = newRow;
+				}
 								
 				// populate the annual table if we've reached a year boundary
 				var t1:int = timeTable.getTAt(timeTableIndex);
 				if(t1 > t) {
 					t = t1;
-
 					annualRiskTable.rows.push(lastRow);
-					lastRow = newRow;
-					
-					//		annualRiskTable.rows[t-t0] = i > 0 ? lifetimeRiskTable.rows[i-1] : new LifetimeRiskRow(1,0,0);
-//					trace("annual[",t,"]=life[",i,"]=",annualRiskTable.getRiskAt(t-t0));
 				}
 				
-				if(timeTableIndex == followupIndex)
+				if(t == followupIndex-1)
 					nYearRisk = lastRow.cif_cvd;
 				
 				timeTableIndex++;
 			}
 			
-			annualRiskTable.rows.push(newRow);
-			
-			// put the last annual row in - we may not have reached a t boundary in the loop
-			//annualRiskTable.rows[t-t0 + 1] = i > 0 ? lifetimeRiskTable.rows[i-1] : new LifetimeRiskRow(1,0,0);			
-			
-			var lifetimeRisk:Number = lastRow.cif_cvd;
-			//var lifetimeRisk:Number = result.lifetimeRisk;
-			
-/*			if (followupIndex >= lage-sage) {
-				nYearRisk = lifetimeRisk;
-			}
-			else {
-				var followupRow:int = timeTable.find_biggest_t_below(followupIndex);
-				//					trace("lifeTimeIndex for nYear ", followupIndex, " is: ", followupRow-startRow, " risk=", lifetimeRiskTable.getRiskAt(followupRow-startRow));
-				nYearRisk = lifetimeRiskTable.getRiskAt(followupRow-startRow);	
-			}
-*/			
+			annualRiskTable.rows.push(lastRow);
+									
 			// set summary result
-			return  new QResultVO(nYearRisk, lifetimeRisk, null, annualRiskTable);
+			return  new QResultVO(nYearRisk, lastRow.cif_cvd, null, annualRiskTable);
 			
 		}
-		
-		public var result:QResultVO;
 		
 		private var intervalTimer:IntervalTimer = new IntervalTimer();
 
@@ -157,72 +137,117 @@ package org.understandinguncertainty.QRISKLifetime
 		*
 		*/
 		private function produceLifetimeRiskTable_int(timeTable:TimeTable, 
-												 from:int, 
-												 from_int:int, 
-												 a_cvd:Number, 
-												 a_death:Number,
-												 a_cvd_int:Number, 
-												 a_death_int:Number,
-												 lifetimeRiskTable:LifetimeRiskTable,
-												 lifetimeRiskTable_int:LifetimeRiskTable
-												):void
+													  from:int, 
+													  from_int:int,
+													  followupIndex:int,
+													  a_cvd:Number, 
+													  a_death:Number,
+													  a_cvd_int:Number, 
+													  a_death_int:Number,
+													  lifetimeRiskTable:LifetimeRiskTable,
+													  lifetimeRiskTable_int:LifetimeRiskTable
+		):QResultVO
 		{
 			var timeTableIndex:int = from;
 			var timeTableIndex_int:int = from_int;
 			
-
+			
 			var t0:int = timeTable.getTAt(timeTableIndex);
 			var t0_int:int =  timeTable.getTAt(timeTableIndex_int);
+					
+			var annualRiskTable:LifetimeRiskTable = new LifetimeRiskTable();
+			var annualRiskTable_int:LifetimeRiskTable = new LifetimeRiskTable();
 			
+			var lastRow:LifetimeRiskRow;
+			var lastRow_int:LifetimeRiskRow;
 			
-			annualRiskTable = new LifetimeRiskTable();
-			annualRiskTable_int = new LifetimeRiskTable();
+			var newRow:LifetimeRiskRow;
+			var newRow_int:LifetimeRiskRow;
+			
+			var nYearRisk:Number = 0;
 			
 			timeTable.init(a_cvd, a_death);
-
+			
 			var t:int = t0-1;
 			
 			// before interventions are applied
-			for(var f:int=from; f < from; f++) {			
+			for(var f:int=from; f < from_int; f++) {			
 				
 				var i:int = f - from;
 				
 				var baseHazard:BaseHazard = timeTable.getBaseHazardAt(timeTableIndex);
-				
-				lifetimeRiskTable.push(1 - baseHazard.cvd_1 - baseHazard.death_1, baseHazard.cvd_1, baseHazard.death_1);
-				lifetimeRiskTable_int.rows[i] = lifetimeRiskTable.rows[i];
+								
+				if(i==0) {
+					lastRow = new LifetimeRiskRow(1 - baseHazard.cvd_1 - baseHazard.death_1, 0, 0);
+				}
+				else {
+					newRow = new LifetimeRiskRow(lastRow.S_1*(1 - baseHazard.cvd_1 - baseHazard.death_1), 
+						lastRow.cif_cvd + lastRow.S_1 * baseHazard.cvd_1, 
+						lastRow.cif_death + lastRow.S_1 * baseHazard.death_1);
+					
+					lastRow = newRow;
+				}
 				
 				// populate the annual table if we've reached a year boundary
 				var t1:int = timeTable.getTAt(timeTableIndex);
 				if(t1 > t) {
 					t = t1;
-					annualRiskTable.rows[t-t0] = i > 0 ? lifetimeRiskTable.rows[i-1] : new LifetimeRiskRow(1,0,0);
-//					trace("annual[",t,"]=life[",i,"]=",annualRiskTable.getRiskAt(t-t0));
+					annualRiskTable.rows.push(lastRow);
+					annualRiskTable_int.rows.push(lastRow);
 				}
+				
+				if(t == followupIndex-1)
+					nYearRisk = lastRow.cif_cvd;
 				
 				timeTableIndex++;
 			}
 			
-			// after interventions are applied
-			for(var i:int=0; i < timeTable.length - from - 1; i++) {			
+			lastRow_int = lastRow;
+			
+			// after interventions are applied 
+			for(i=f-from; i < timeTable.length - from - 1; f++, i++) {			
 				
-				var baseHazard:BaseHazard = timeTable.getBaseHazardAt(timeTableIndex);
+				timeTable.init(a_cvd, a_death);
+				baseHazard = timeTable.getBaseHazardAt(timeTableIndex);
 				
-				lifetimeRiskTable.push(1 - baseHazard.cvd_1 - baseHazard.death_1, baseHazard.cvd_1, baseHazard.death_1);
+				timeTable.init(a_cvd_int, a_death_int);
+				var baseHazard_int:BaseHazard = timeTable.getBaseHazardAt(timeTableIndex);
+				
+				if(i==0) {
+					lastRow = new LifetimeRiskRow(1 - baseHazard.cvd_1 - baseHazard.death_1, 0, 0);
+					lastRow_int = new LifetimeRiskRow(1 - baseHazard_int.cvd_1 - baseHazard_int.death_1, 0, 0);
+				}
+				else {
+					newRow = new LifetimeRiskRow(lastRow.S_1*(1 - baseHazard.cvd_1 - baseHazard.death_1), 
+						lastRow.cif_cvd + lastRow.S_1 * baseHazard.cvd_1, 
+						lastRow.cif_death + lastRow.S_1 * baseHazard.death_1);
+					newRow_int = new LifetimeRiskRow(lastRow_int.S_1*(1 - baseHazard_int.cvd_1 - baseHazard_int.death_1), 
+						lastRow_int.cif_cvd + lastRow_int.S_1 * baseHazard_int.cvd_1, 
+						lastRow_int.cif_death + lastRow_int.S_1 * baseHazard_int.death_1);
+					
+					lastRow = newRow;
+					lastRow_int = newRow_int;
+				}
 				
 				// populate the annual table if we've reached a year boundary
-				var t1:int = timeTable.getTAt(timeTableIndex);
+				t1 = timeTable.getTAt(timeTableIndex);
 				if(t1 > t) {
 					t = t1;
-					annualRiskTable.rows[t-t0] = i > 0 ? lifetimeRiskTable.rows[i-1] : new LifetimeRiskRow(1,0,0);
-//					trace("annual[",t,"]=life[",i,"]=",annualRiskTable.getRiskAt(t-t0));
+					annualRiskTable.rows.push(lastRow);
+					annualRiskTable_int.rows.push(lastRow_int);
 				}
+				
+				if(t == followupIndex-1)
+					nYearRisk = lastRow.cif_cvd;
 				
 				timeTableIndex++;
 			}
 			
-			// put the last annual row in - we may not have reached a t boundary in the loop
-			annualRiskTable.rows[t-t0 + 1] = i > 0 ? lifetimeRiskTable.rows[i-1] : new LifetimeRiskRow(1,0,0);			
+			annualRiskTable.rows.push(lastRow);
+			annualRiskTable_int.rows.push(lastRow_int);
+			
+			// set summary result
+			return  new QResultVO(nYearRisk, lastRow.cif_cvd, null, annualRiskTable, annualRiskTable_int);
 			
 		}
 
@@ -248,42 +273,24 @@ package org.understandinguncertainty.QRISKLifetime
 				var lifetimeRiskTable:LifetimeRiskTable = new LifetimeRiskTable();
 				var lifetimeRiskTable_int:LifetimeRiskTable = new LifetimeRiskTable();
 				
-				produceLifetimeRiskTable_int(timeTable, 
-					startRow, startRow_int, 
+				// get n-year risk
+				var followupIndex:int = cage-sage+noOfFollowupYears;
+
+				result = produceLifetimeRiskTable_int(timeTable, 
+					startRow, startRow_int,
+					followupIndex,
 					a_cvd, a_death,
 					a_cvd_int, a_death_int,
 					lifetimeRiskTable,
 					lifetimeRiskTable_int
 				);
 				
-				var lifetimeRisk:Number = lifetimeRiskTable.lifetimeRisk;
-				
-				// get n-year risk
-				var followupIndex:int = cage-sage+noOfFollowupYears;
-
-				var nYearRisk:Number;
-				if (followupIndex >= lage-sage) {
-				  	nYearRisk = lifetimeRisk;
-				}
-				else {
-				  	var followupRow:int = timeTable.find_biggest_t_below(followupIndex);
-//					trace("lifeTimeIndex for nYear ", followupIndex, " is: ", followupRow-startRow, " risk=", lifetimeRiskTable.getRiskAt(followupRow-startRow));
-					nYearRisk = lifetimeRiskTable.getRiskAt(followupRow-startRow);	
-				}
-				
-/*				trace("annual table when nyearRisk=",nYearRisk," lifetime=",lifetimeRisk);
-				for(var i:int = 0; i < annualRiskTable.rows.length; i++) {
-					trace(i, ": ", annualRiskTable.rows[i].cif_cvd);
-				}
-*/				
-				// set summary result
-				result = new QResultVO(nYearRisk, lifetimeRisk, null, annualRiskTable);
-
 				dispatchEvent(new Event(Event.COMPLETE));
 			});
 			
 			// either read in, or access a cached copy of the published data file
 			timeTable.load(path);
 		}
+		
 	}
 }
