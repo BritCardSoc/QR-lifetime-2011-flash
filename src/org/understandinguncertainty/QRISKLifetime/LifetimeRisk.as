@@ -47,7 +47,7 @@ package org.understandinguncertainty.QRISKLifetime
 		 */
 		private function produceLifetimeRiskTable(timeTable:TimeTable, 
 												 from:int,
-												 followupIndex:int,
+												 followupYear:int,
 												 a_cvd:Number, 
 												 a_death:Number):QResultVO
 		{
@@ -71,7 +71,8 @@ package org.understandinguncertainty.QRISKLifetime
 				var baseHazard:BaseHazard = timeTable.getBaseHazardAt(timeTableIndex);
 				
 				if(i==0) {
-					lastRow = new LifetimeRiskRow(1 - baseHazard.cvd_1 - baseHazard.death_1, 0, 0);
+//					lastRow = new LifetimeRiskRow(1 - baseHazard.cvd_1 - baseHazard.death_1, 0, 0);
+					lastRow = new LifetimeRiskRow(1 - baseHazard.cvd_1 - baseHazard.death_1, baseHazard.cvd_1, baseHazard.death_1);
 				}
 				else {
 					newRow = new LifetimeRiskRow(lastRow.S_1*(1 - baseHazard.cvd_1 - baseHazard.death_1), 
@@ -83,13 +84,15 @@ package org.understandinguncertainty.QRISKLifetime
 								
 				// populate the annual table if we've reached a year boundary
 				var t1:int = timeTable.getTAt(timeTableIndex);
+//				var t2:Number = timeTable.getTAt(timeTableIndex);
 				if(t1 > t) {
 					t = t1;
 					annualRiskTable.rows.push(lastRow);
 				}
 				
-				if(t == followupIndex-1)
+				if(t == followupYear-1) {
 					nYearRisk = lastRow.cif_cvd;
+				}
 				
 				timeTableIndex++;
 			}
@@ -116,12 +119,12 @@ package org.understandinguncertainty.QRISKLifetime
 			timeTable.addEventListener(Event.COMPLETE, function(event:Event):void {
 				
 				// timeTable load is complete
-				var startRow:int = timeTable.find_biggest_t_below(cage-sage)+1;
+				var startRow:int = timeTable.find_biggest_t_below(cage-sage);
 				
 				// get n-year risk
-				var followupIndex:int = cage-sage+noOfFollowupYears;
+				var followupYear:int = cage-sage+noOfFollowupYears;
 
-				result = produceLifetimeRiskTable(timeTable, startRow, followupIndex, a_cvd, a_death);
+				result = produceLifetimeRiskTable(timeTable, startRow, followupYear, a_cvd, a_death);
 				
 
 				dispatchEvent(new Event(Event.COMPLETE));
@@ -139,7 +142,7 @@ package org.understandinguncertainty.QRISKLifetime
 		private function produceLifetimeRiskTable_int(timeTable:TimeTable, 
 													  from:int, 
 													  from_int:int,
-													  followupIndex:int,
+													  followupYear:int,
 													  a_cvd:Number, 
 													  a_death:Number,
 													  a_cvd_int:Number, 
@@ -169,6 +172,7 @@ package org.understandinguncertainty.QRISKLifetime
 			timeTable.init(a_cvd, a_death);
 			
 			var t:int = t0-1;
+		
 			
 			// before interventions are applied
 			for(var f:int=from; f < from_int; f++) {			
@@ -196,7 +200,7 @@ package org.understandinguncertainty.QRISKLifetime
 					annualRiskTable_int.rows.push(lastRow);
 				}
 				
-				if(t == followupIndex-1)
+				if(t == followupYear-1)
 					nYearRisk = lastRow.cif_cvd;
 				
 				timeTableIndex++;
@@ -237,7 +241,7 @@ package org.understandinguncertainty.QRISKLifetime
 					annualRiskTable_int.rows.push(lastRow_int);
 				}
 				
-				if(t == followupIndex-1)
+				if(t == followupYear-1)
 					nYearRisk = lastRow.cif_cvd;
 				
 				timeTableIndex++;
@@ -267,18 +271,20 @@ package org.understandinguncertainty.QRISKLifetime
 			timeTable.addEventListener(Event.COMPLETE, function(event:Event):void {
 				
 				// timeTable load is complete
-				var startRow:int = timeTable.find_biggest_t_below(cage-sage)+1;
-				var startRow_int:int = timeTable.find_biggest_t_below(cage_int-sage)+1;
+//				var startRow:int = timeTable.find_biggest_t_below(cage-sage)+1;
+//				var startRow_int:int = timeTable.find_biggest_t_below(cage_int-sage)+1;
+				var startRow:int = timeTable.find_biggest_t_below(cage-sage);
+				var startRow_int:int = timeTable.find_biggest_t_below(cage_int-sage);
 				
 				var lifetimeRiskTable:LifetimeRiskTable = new LifetimeRiskTable();
 				var lifetimeRiskTable_int:LifetimeRiskTable = new LifetimeRiskTable();
 				
 				// get n-year risk
-				var followupIndex:int = cage-sage+noOfFollowupYears;
+				var followupYear:int = cage-sage+noOfFollowupYears;
 
 				result = produceLifetimeRiskTable_int(timeTable, 
 					startRow, startRow_int,
-					followupIndex,
+					followupYear,
 					a_cvd, a_death,
 					a_cvd_int, a_death_int,
 					lifetimeRiskTable,
