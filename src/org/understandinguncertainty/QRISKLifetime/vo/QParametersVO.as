@@ -140,21 +140,21 @@ package org.understandinguncertainty.QRISKLifetime.vo
 		public function toString():String 
 		{
 			var s:String = "";
-			s += b_gender.toString();
-			s += b_AF.toString();
-			s += b_ra.toString();
-			s += b_renal.toString();
-			s += b_treatedhyp.toString();
-			s += b_type2.toString() + ",";
-			s += bmi.toPrecision(4) + ",";
-			s += ethRisk..toString() + ",";
-			s += fh_cvd.toString() + ",";
-			s += rati.toPrecision(6) + ",";
-			s += sbp..toPrecision(6) + ",";
-			s += smoke_cat.toString() + ",";
-			s += town.toPrecision(6) + ",";
-			s += age.toString() + ",";
-			s += noOfFollowUpYears.toString();
+			s += b_gender ? "M " : "F ";
+			s += b_AF ? "af " : ""; //.toString();
+			s += b_ra ? "ra " : ""; //.toString();
+			s += b_renal ? "re " : ""; //.toString();
+			s += b_treatedhyp ? "thyp " : ""; //.toString();
+			s += b_type2 ? "dia " : ""; //.toString() + ",";
+			s += "bmi:" + bmi.toPrecision(4) + " ";
+			s += "eth:" + ethRisk.toString() + " ";
+			s += fh_cvd ? "fh ": " "; //.toString() + ",";
+			s += "rati:" + rati.toPrecision(3) + " ";
+			s += "sbp:" + sbp.toPrecision(3) + " ";
+			s += "smk:" + smoke_cat.toString() + " ";
+			s += "town:" + town.toPrecision(3) + " ";
+			s += "age:" + age.toString() + " ";
+			s += "nY:" + noOfFollowUpYears.toString();
 			return s;		
 		}
 	}
