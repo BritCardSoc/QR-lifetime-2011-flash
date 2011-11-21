@@ -71,13 +71,28 @@ package org.understandinguncertainty.QRISKLifetime
 				var baseHazard:BaseHazard = timeTable.getBaseHazardAt(timeTableIndex);
 				
 				if(i==0) {
-//					lastRow = new LifetimeRiskRow(1 - baseHazard.cvd_1 - baseHazard.death_1, 0, 0);
-					lastRow = new LifetimeRiskRow(1 - baseHazard.cvd_1 - baseHazard.death_1, baseHazard.cvd_1, baseHazard.death_1);
+
+					// Note: this is original QRISK code which fails when the timeTable bin size is large since 
+					// we cannot then approxmate the death and cvd rates to zero in the first bin.
+					//
+					//	lastRow = new LifetimeRiskRow(1 - baseHazard.cvd_1 - baseHazard.death_1, 0, 0);
+					//
+					lastRow = new LifetimeRiskRow(
+						1 - baseHazard.cvd_1 - baseHazard.death_1, 
+						baseHazard.cvd_1, 
+						baseHazard.death_1,
+						1 - baseHazard.cvd_1,
+						baseHazard.cvd_1
+					);
 				}
 				else {
-					newRow = new LifetimeRiskRow(lastRow.S_1*(1 - baseHazard.cvd_1 - baseHazard.death_1), 
+					newRow = new LifetimeRiskRow(
+						lastRow.S_1*(1 - baseHazard.cvd_1 - baseHazard.death_1), 
 						lastRow.cif_cvd + lastRow.S_1 * baseHazard.cvd_1, 
-						lastRow.cif_death + lastRow.S_1 * baseHazard.death_1);
+						lastRow.cif_death + lastRow.S_1 * baseHazard.death_1,
+						lastRow.S_noDeath*(1 - baseHazard.cvd_1),
+						lastRow.cvd_noDeath + lastRow.S_noDeath * baseHazard.cvd_1
+					);
 					
 					lastRow = newRow;
 				}
@@ -182,12 +197,21 @@ package org.understandinguncertainty.QRISKLifetime
 				var baseHazard:BaseHazard = timeTable.getBaseHazardAt(timeTableIndex);
 								
 				if(i==0) {
-					lastRow = new LifetimeRiskRow(1 - baseHazard.cvd_1 - baseHazard.death_1, 0, 0);
+					lastRow = new LifetimeRiskRow(
+						1 - baseHazard.cvd_1 - baseHazard.death_1, 
+						baseHazard.cvd_1, // was 0, //TODO: revise to baseHazard.cvd_1?
+						baseHazard.death_1, // TODO
+						1 - baseHazard.cvd_1, 
+						baseHazard.cvd_1 // TODO
+					);
 				}
 				else {
-					newRow = new LifetimeRiskRow(lastRow.S_1*(1 - baseHazard.cvd_1 - baseHazard.death_1), 
+					newRow = new LifetimeRiskRow(
+						lastRow.S_1*(1 - baseHazard.cvd_1 - baseHazard.death_1), 
 						lastRow.cif_cvd + lastRow.S_1 * baseHazard.cvd_1, 
-						lastRow.cif_death + lastRow.S_1 * baseHazard.death_1);
+						lastRow.cif_death + lastRow.S_1 * baseHazard.death_1, 
+						lastRow.S_noDeath*(1 - baseHazard.cvd_1),
+						lastRow.cvd_noDeath + lastRow.S_noDeath*baseHazard.cvd_1);
 					
 					lastRow = newRow;
 				}
@@ -218,17 +242,37 @@ package org.understandinguncertainty.QRISKLifetime
 				var baseHazard_int:BaseHazard = timeTable.getBaseHazardAt(timeTableIndex);
 				
 				if(i==0) {
-					lastRow = new LifetimeRiskRow(1 - baseHazard.cvd_1 - baseHazard.death_1, 0, 0);
-					lastRow_int = new LifetimeRiskRow(1 - baseHazard_int.cvd_1 - baseHazard_int.death_1, 0, 0);
+					lastRow = new LifetimeRiskRow(
+						1 - baseHazard.cvd_1 - baseHazard.death_1, 
+						baseHazard.cvd_1, //TODO
+						baseHazard.death_1,
+						1 - baseHazard.cvd_1,
+						baseHazard.cvd_1
+					);
+					lastRow_int = new LifetimeRiskRow(
+						1 - baseHazard_int.cvd_1 - baseHazard_int.death_1, 
+						baseHazard_int.cvd_1, //TODO
+						baseHazard_int.death_1,
+						1 - baseHazard_int.cvd_1,
+						baseHazard_int.cvd_1
+					);
 				}
 				else {
-					newRow = new LifetimeRiskRow(lastRow.S_1*(1 - baseHazard.cvd_1 - baseHazard.death_1), 
+					newRow = new LifetimeRiskRow(
+						lastRow.S_1*(1 - baseHazard.cvd_1 - baseHazard.death_1), 
 						lastRow.cif_cvd + lastRow.S_1 * baseHazard.cvd_1, 
-						lastRow.cif_death + lastRow.S_1 * baseHazard.death_1);
-					newRow_int = new LifetimeRiskRow(lastRow_int.S_1*(1 - baseHazard_int.cvd_1 - baseHazard_int.death_1), 
+						lastRow.cif_death + lastRow.S_1 * baseHazard.death_1,
+						lastRow.S_noDeath*(1 - baseHazard.cvd_1),
+						lastRow.cvd_noDeath + lastRow.S_noDeath*baseHazard.cvd_1
+					);
+					newRow_int = new LifetimeRiskRow(
+						lastRow_int.S_1*(1 - baseHazard_int.cvd_1 - baseHazard_int.death_1), 
 						lastRow_int.cif_cvd + lastRow_int.S_1 * baseHazard_int.cvd_1, 
-						lastRow_int.cif_death + lastRow_int.S_1 * baseHazard_int.death_1);
-					
+						lastRow_int.cif_death + lastRow_int.S_1 * baseHazard_int.death_1,
+						lastRow_int.S_noDeath*(1 - baseHazard_int.cvd_1),
+						lastRow_int.cvd_noDeath + lastRow_int.S_noDeath*baseHazard_int.cvd_1
+					);
+										
 					lastRow = newRow;
 					lastRow_int = newRow_int;
 				}

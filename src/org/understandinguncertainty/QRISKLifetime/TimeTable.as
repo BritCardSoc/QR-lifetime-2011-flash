@@ -75,10 +75,8 @@ package org.understandinguncertainty.QRISKLifetime
 			});
 		}
 		
-			
-		// same as load, but we cache annually rather than on every datapoint
 		//
-		// not used
+		// same as load, but we bin data in time (using BINSIZE years) rather than on every datapoint
 		//
 		public function quickLoad(path:String):void
 		{
