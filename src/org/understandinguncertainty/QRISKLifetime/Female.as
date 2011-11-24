@@ -30,6 +30,11 @@ package org.understandinguncertainty.QRISKLifetime
 			0.6076275665698729300000000
 		];
 		
+		public function getSmokeCVDAt(index:int):Number
+		{
+			return smokeCVD[index];
+		}
+		
 		public function cvd(p:QParametersVO):Number
 		{
 			/* Applying the fractional polynomial transforms */
@@ -64,8 +69,7 @@ package org.understandinguncertainty.QRISKLifetime
 			a += p.fh_cvd * 0.5135507323965317100000000;
 			
 			/* Sum from interaction terms */
-			
-			/* Calculate the score itself */
+						
 			return a;
 		}
 		
@@ -89,6 +93,11 @@ package org.understandinguncertainty.QRISKLifetime
 			0.7964460203072020200000000,
 			1.0533145224303277000000000
 		];
+		
+		public function getSmokeDeathAt(index:int):Number
+		{
+			return smokeDeath[index];
+		}
 		
 		public function death(p:QParametersVO):Number
 		{

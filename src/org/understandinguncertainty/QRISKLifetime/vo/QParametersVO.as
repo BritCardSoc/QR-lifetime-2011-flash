@@ -17,7 +17,7 @@ package org.understandinguncertainty.QRISKLifetime.vo
 		public var town:Number;
 		public var age:int;
 		public var noOfFollowUpYears:int;
-		
+				
 		/**
 		 * 
 		 * @param b_gender		0..1

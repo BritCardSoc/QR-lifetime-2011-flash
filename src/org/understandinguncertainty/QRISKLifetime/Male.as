@@ -22,13 +22,18 @@ package org.understandinguncertainty.QRISKLifetime
 			-0.1055741084408314400000000
 		];
 		
-		private const smokeCVD:Array = [
+		public const smokeCVD:Array = [
 			0,
 			0.1655389770495527800000000,
 			0.3227167436634277900000000,
 			0.4393091679622852500000000,
 			0.5830168090609184600000000
 		];
+		
+		public function getSmokeCVDAt(index:int):Number
+		{
+			return smokeCVD[index];
+		}
 		
 		public function cvd(p:QParametersVO):Number
 		{
@@ -89,6 +94,11 @@ package org.understandinguncertainty.QRISKLifetime
 			0.7849316319893276900000000,
 			1.0119244230108204000000000
 		];
+		
+		public function getSmokeDeathAt(index:int):Number
+		{
+			return smokeDeath[index];
+		}
 		
 		public function death(p:QParametersVO):Number
 		{

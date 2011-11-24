@@ -244,14 +244,14 @@ package org.understandinguncertainty.QRISKLifetime
 				if(i==0) {
 					lastRow = new LifetimeRiskRow(
 						1 - baseHazard.cvd_1 - baseHazard.death_1, 
-						baseHazard.cvd_1, //TODO
+						baseHazard.cvd_1, 
 						baseHazard.death_1,
 						1 - baseHazard.cvd_1,
 						baseHazard.cvd_1
 					);
 					lastRow_int = new LifetimeRiskRow(
 						1 - baseHazard_int.cvd_1 - baseHazard_int.death_1, 
-						baseHazard_int.cvd_1, //TODO
+						baseHazard_int.cvd_1, 
 						baseHazard_int.death_1,
 						1 - baseHazard_int.cvd_1,
 						baseHazard_int.cvd_1

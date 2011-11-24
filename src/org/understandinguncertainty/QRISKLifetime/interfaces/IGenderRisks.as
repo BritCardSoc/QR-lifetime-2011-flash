@@ -15,5 +15,14 @@ package org.understandinguncertainty.QRISKLifetime.interfaces
 		 */
 		function death(p:QParametersVO):Number;
 
+		/**
+		 * Get cvd smoking log hazard ratio
+		 */
+		function getSmokeCVDAt(index:int):Number;
+		
+		/**
+		 * Get death smoking log hazard ratio
+		 */
+		function getSmokeDeathAt(index:int):Number;
 	}
 }
