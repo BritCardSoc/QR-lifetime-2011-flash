@@ -117,7 +117,7 @@ package org.understandinguncertainty.QRISKLifetime
 			a_death_int = a_death;
 			
 			// adjust cvd for new cholesterol (cholDiff  is totalCholesterol - hdlCholesterol in mmol/L)
-			a_cvd_int += (cholDiff - cholDiff_int)*Math.log(0.78);
+			a_cvd_int += (cholDiff - cholDiff_int)*Math.log(0.82);
 			
 			// adjust cvd for new sbp
 			a_cvd_int += (p.sbp - p_int.sbp)*Math.log(0.966);
