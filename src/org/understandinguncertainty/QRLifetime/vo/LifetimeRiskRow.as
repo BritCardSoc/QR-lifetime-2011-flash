@@ -1,4 +1,10 @@
-package org.understandinguncertainty.QRISKLifetime.vo
+/*
+This file forms part of the library which provides the JBS3Risk Risk Model.
+It is ©2012 University of Cambridge.
+It is released under version 3 of the GNU General Public License
+Source code, including a copy of the license is available at https://github.com/BritCardSoc/JBS3Risk
+*/
+package org.understandinguncertainty.QRLifetime.vo
 {
 	public class LifetimeRiskRow
 	{

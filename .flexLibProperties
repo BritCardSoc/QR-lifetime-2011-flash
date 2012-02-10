@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <flexLibProperties includeAllClasses="true" version="3">
   <includeClasses>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.DataLoader"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.Female"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.FlashScore2011"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.LifetimeRisk"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.LifetimeRiskTable"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.Male"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.TimeTable"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.interfaces.IGenderRisks"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.support.IntervalTimer"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.BaseHazard"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.LifetimeRiskRow"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.LoaderDataVO"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.QParametersVO"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.QResultVO"/>
-    <classEntry path="org.understandinguncertainty.QRISKLifetime.vo.TimeTableRow"/>
+    <classEntry path="org.understandinguncertainty.QRLifetime.DataLoader"/>
+    <classEntry path="org.understandinguncertainty.QRLifetime.Female"/>
+    <classEntry path="org.understandinguncertainty.QRLifetime.FlashScore2011"/>
+    <classEntry path="org.understandinguncertainty.QRLifetime.LifetimeRisk"/>
+    <classEntry path="org.understandinguncertainty.QRLifetime.LifetimeRiskTable"/>
+    <classEntry path="org.understandinguncertainty.QRLifetime.Male"/>
+    <classEntry path="org.understandinguncertainty.QRLifetime.TimeTable"/>
+    <classEntry path="org.understandinguncertainty.QRLifetime.interfaces.IGenderRisks"/>
+    <classEntry path="org.understandinguncertainty.QRLifetime.support.IntervalTimer"/>
+    <classEntry path="org.understandinguncertainty.QRLifetime.vo.BaseHazard"/>
+    <classEntry path="org.understandinguncertainty.QRLifetime.vo.LifetimeRiskRow"/>
+    <classEntry path="org.understandinguncertainty.QRLifetime.vo.LoaderDataVO"/>
+    <classEntry path="org.understandinguncertainty.QRLifetime.vo.QParametersVO"/>
+    <classEntry path="org.understandinguncertainty.QRLifetime.vo.QResultVO"/>
+    <classEntry path="org.understandinguncertainty.QRLifetime.vo.TimeTableRow"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

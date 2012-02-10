@@ -1,14 +1,23 @@
-package org.understandinguncertainty.QRISKLifetime
+/*
+This file forms part of the library which provides the JBS3Risk Risk Model.
+It is ©2012 University of Cambridge.
+It is released under version 3 of the GNU General Public License
+Source code, including a copy of the license is available at https://github.com/BritCardSoc/JBS3Risk
+
+It contains code derived from http://qrisk.org/lifetime/QRISK-lifetime-2011-opensource.v1.0.tgz released by ClinRisk Ltd.
+
+*/
+package org.understandinguncertainty.QRLifetime
 {
 	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
-	import org.understandinguncertainty.QRISKLifetime.interfaces.IGenderRisks;
-	import org.understandinguncertainty.QRISKLifetime.support.IntervalTimer;
-	import org.understandinguncertainty.QRISKLifetime.vo.QParametersVO;
-	import org.understandinguncertainty.QRISKLifetime.vo.QResultVO;
-	import org.understandinguncertainty.QRISKLifetime.vo.TimeTableRow;
+	import org.understandinguncertainty.QRLifetime.interfaces.IGenderRisks;
+	import org.understandinguncertainty.QRLifetime.support.IntervalTimer;
+	import org.understandinguncertainty.QRLifetime.vo.QParametersVO;
+	import org.understandinguncertainty.QRLifetime.vo.QResultVO;
+	import org.understandinguncertainty.QRLifetime.vo.TimeTableRow;
 
 	[Event(name="complete", type="flash.events.Event")]
 	public class FlashScore2011 extends EventDispatcher
