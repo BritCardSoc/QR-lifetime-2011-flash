@@ -65,6 +65,8 @@ package org.understandinguncertainty.QRLifetime.vo
 			checkRange:Boolean = true
 			)
 		{
+			// Responsibility for range checks moved to application
+			/*
 			if(checkRange) {
 				if(b_gender < 0 || b_gender > 1)
 					throw new Error("gender must be 0 (female) or 1 (male)");
@@ -97,7 +99,7 @@ package org.understandinguncertainty.QRLifetime.vo
 				if(noOfFollowUpYears < 0 || noOfFollowUpYears + age > 95)
 					throw new Error("age must be between 0 and (95-age)");
 			}
-			
+			*/
 			this.b_gender = b_gender;
 			this.b_AF = b_AF;
 			this.b_ra = b_ra;

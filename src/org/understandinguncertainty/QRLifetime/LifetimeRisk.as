@@ -45,8 +45,6 @@ package org.understandinguncertainty.QRLifetime
 		 * return the array
 		 * NB need to multiply cif by 100 to get percentage
 		 * 
-		 * Note: see unused/LifetimeRisk-annotated for a copy of the source with ported C code in comments
-		 * 
 		 * @param timeTable
 		 * @param from
 		 * @param a_cvd
