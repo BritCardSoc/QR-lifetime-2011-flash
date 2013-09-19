@@ -25,16 +25,18 @@ package org.understandinguncertainty.QRLifetime
 		// summary result
 		public var result:QResultVO;
 		
+		private var timeTable:TimeTable;
 		
 		public function load(path:String):void
 		{
-			var timeTable:TimeTable = new TimeTable();
+			timeTable = new TimeTable();
 			timeTable.addEventListener(Event.COMPLETE, timeTableLoaded);
 			timeTable.load(path);
 		}
 
 		public function timeTableLoaded(event:Event):void
 		{
+			timeTable.removeEventListener(Event.COMPLETE, timeTableLoaded);
 			dispatchEvent(new Event(Event.INIT));
 		}
 		
@@ -127,7 +129,6 @@ package org.understandinguncertainty.QRLifetime
 		}
 		
 		private var intervalTimer:IntervalTimer = new IntervalTimer();
-
 		public function lifetimeRisk(path:String, cage:int, a_cvd:Number, a_death:Number, noOfFollowupYears:Number):void 
 		{			
 
@@ -136,21 +137,23 @@ package org.understandinguncertainty.QRLifetime
 			
 			var timeTable:TimeTable = new TimeTable();
 			
-			timeTable.init(a_cvd, a_death);
-			
-			timeTable.addEventListener(Event.COMPLETE, function(event:Event):void {
+			var listener:Function = function (event:Event):void {
 				
 				// timeTable load is complete
 				var startRow:int = timeTable.find_biggest_t_below(cage-sage);
 				
 				// get n-year risk
 				var followupYear:int = cage-sage+noOfFollowupYears;
-
-				result = produceLifetimeRiskTable(timeTable, startRow, followupYear, a_cvd, a_death);
 				
-
+				result = produceLifetimeRiskTable(timeTable, startRow, followupYear, a_cvd, a_death);
+				timeTable.removeEventListener(Event.COMPLETE, listener);
+				
 				dispatchEvent(new Event(Event.COMPLETE));
-			});
+			}
+			
+			timeTable.init(a_cvd, a_death);
+			
+			timeTable.addEventListener(Event.COMPLETE, listener);
 			
 			// either read in, or access a cached copy of the published data file
 			timeTable.load(path);
@@ -319,11 +322,9 @@ package org.understandinguncertainty.QRLifetime
 			
 			timeTable.init(a_cvd, a_death);
 			
-			timeTable.addEventListener(Event.COMPLETE, function(event:Event):void {
+			var listener:Function = function(event:Event):void {
 				
 				// timeTable load is complete
-//				var startRow:int = timeTable.find_biggest_t_below(cage-sage)+1;
-//				var startRow_int:int = timeTable.find_biggest_t_below(cage_int-sage)+1;
 				var startRow:int = timeTable.find_biggest_t_below(cage-sage);
 				var startRow_int:int = timeTable.find_biggest_t_below(cage_int-sage);
 				
@@ -332,7 +333,7 @@ package org.understandinguncertainty.QRLifetime
 				
 				// get n-year risk
 				var followupYear:int = cage-sage+noOfFollowupYears;
-
+				
 				result = produceLifetimeRiskTable_int(timeTable, 
 					startRow, startRow_int,
 					followupYear,
@@ -342,8 +343,11 @@ package org.understandinguncertainty.QRLifetime
 					lifetimeRiskTable_int
 				);
 				
+				timeTable.removeEventListener(Event.COMPLETE, listener);
 				dispatchEvent(new Event(Event.COMPLETE));
-			});
+			}
+			
+			timeTable.addEventListener(Event.COMPLETE, listener);
 			
 			// either read in, or access a cached copy of the published data file
 			timeTable.load(path);

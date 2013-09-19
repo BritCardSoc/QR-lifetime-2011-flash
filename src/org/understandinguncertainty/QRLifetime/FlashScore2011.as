@@ -37,17 +37,21 @@ package org.understandinguncertainty.QRLifetime
 			var gr:IGenderRisks = (p.b_gender == 0) ? new Female() : new Male();
 			
 			a_cvd = gr.cvd(p);	
-			a_death = gr.death(p);		
+			a_death = gr.death(p);
 			
-			lifetimeRisk.addEventListener(Event.INIT, function(event:Event):void {
-				lifetimeRisk.addEventListener(Event.COMPLETE, function(event:Event):void {
+			var listener1:Function = function(event:Event):void {
+				var listener2:Function = function(event:Event):void {
 					result = lifetimeRisk.result;
 					result.nYearRisk *= 100;
 					result.lifetimeRisk *= 100;
 					dispatchEvent(new Event(Event.COMPLETE));
-				});
+					lifetimeRisk.removeEventListener(Event.COMPLETE, listener2);
+				}
+				lifetimeRisk.addEventListener(Event.COMPLETE, listener2);
 				lifetimeRisk.lifetimeRisk(path, p.age, a_cvd, a_death, p.noOfFollowUpYears);
-			});
+				lifetimeRisk.removeEventListener(Event.INIT, listener1);
+			}
+			lifetimeRisk.addEventListener(Event.INIT, listener1);
 			lifetimeRisk.load(path);
 		}
 		
@@ -64,8 +68,7 @@ package org.understandinguncertainty.QRLifetime
 		 */
 		public function calculateScoreWithInterventions(path:String, 
 														p:QParametersVO, 
-														p_int:QParametersVO
-		):void
+														p_int:QParametersVO):void
 		{
 			outputData = "";
 			errorData = "";
@@ -80,15 +83,19 @@ package org.understandinguncertainty.QRLifetime
 			a_cvd_int = gr.cvd(p_int);	
 			a_death_int = gr.death(p_int);		
 			
-			lifetimeRisk.addEventListener(Event.INIT, function(event:Event):void {
-				lifetimeRisk.addEventListener(Event.COMPLETE, function(event:Event):void {
+			var listener1:Function = function(event:Event):void {
+				var listener2:Function = function(event:Event):void {
 					result = lifetimeRisk.result;
 					result.nYearRisk *= 100;
 					result.lifetimeRisk *= 100;
 					dispatchEvent(new Event(Event.COMPLETE));
-				});
+					lifetimeRisk.removeEventListener(Event.COMPLETE, listener2);
+				}
+				lifetimeRisk.addEventListener(Event.COMPLETE, listener2);
 				lifetimeRisk.lifetimeRisk_int(path, p.age, p_int.age, a_cvd, a_death, a_cvd_int, a_death_int, p.noOfFollowUpYears);
-			});
+				lifetimeRisk.removeEventListener(Event.INIT, listener1);
+			}
+			lifetimeRisk.addEventListener(Event.INIT, listener1);
 			lifetimeRisk.load(path);			
 		}
 		
@@ -137,15 +144,20 @@ package org.understandinguncertainty.QRLifetime
 			// adjust death for new smoking category
 			a_death_int +=  (gr.getSmokeDeathAt(p_int.smoke_cat) - gr.getSmokeDeathAt(p.smoke_cat));
 
-			lifetimeRisk.addEventListener(Event.INIT, function(event:Event):void {
-				lifetimeRisk.addEventListener(Event.COMPLETE, function(event:Event):void {
+			// Could do with promises here due to messy asynchronous data table reads
+			var listener1:Function = function(event:Event):void {
+				var listener2:Function = function(event:Event):void {
 					result = lifetimeRisk.result;
 					result.nYearRisk *= 100;
 					result.lifetimeRisk *= 100;
 					dispatchEvent(new Event(Event.COMPLETE));
-				});
+					lifetimeRisk.removeEventListener(Event.COMPLETE, listener2);
+				}
+				lifetimeRisk.addEventListener(Event.COMPLETE, listener2);
 				lifetimeRisk.lifetimeRisk_int(path, p.age, p_int.age, a_cvd, a_death, a_cvd_int, a_death_int, p.noOfFollowUpYears);
-			});
+				lifetimeRisk.removeEventListener(Event.INIT, listener1);
+			}
+			lifetimeRisk.addEventListener(Event.INIT, listener1);
 			lifetimeRisk.load(path);			
 		}
 	}
