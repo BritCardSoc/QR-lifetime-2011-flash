@@ -182,6 +182,8 @@ package org.understandinguncertainty.QRLifetime
 			
 			var t0:int = timeTable.getTAt(timeTableIndex);
 			var t0_int:int =  timeTable.getTAt(timeTableIndex_int);
+			
+			// trace("from="+from+" from_int="+from_int+" t0="+t0+" t0_int="+t0_int);
 					
 			var annualRiskTable:LifetimeRiskTable = new LifetimeRiskTable();
 			var annualRiskTable_int:LifetimeRiskTable = new LifetimeRiskTable();

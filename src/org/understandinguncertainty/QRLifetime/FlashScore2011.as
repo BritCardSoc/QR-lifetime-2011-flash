@@ -123,6 +123,9 @@ package org.understandinguncertainty.QRLifetime
 			var a_cvd_int:Number;
 			var a_death_int:Number;
 			
+			// trace("djs: p.age="+p.age+" p.age_int="+p_int.age);
+			
+			
 			// get baseline cvd and death risks for without intervention parameters p
 			var gr:IGenderRisks = (p.b_gender == 0) ? new Female() : new Male();
 			a_cvd = gr.cvd(p);	

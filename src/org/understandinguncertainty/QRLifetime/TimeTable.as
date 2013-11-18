@@ -31,6 +31,7 @@ package org.understandinguncertainty.QRLifetime
 		private var exp_a_death:Number;
 		
 		public static var paths:Vector.<String> = new Vector.<String>();
+		public static var loading:Boolean = false;
 		public static var cachedRows:Vector.<Vector.<TimeTableRow>> = new Vector.<Vector.<TimeTableRow>>();
 		
 		public function load(path:String):void {
@@ -89,6 +90,9 @@ package org.understandinguncertainty.QRLifetime
 		//
 		public function quickLoad(path:String):void
 		{
+			if(loading)
+				return;
+			
 			var pathIndex:int = paths.indexOf(path);
 			if(pathIndex >= 0) {
 				rows = cachedRows[pathIndex];
@@ -96,6 +100,8 @@ package org.understandinguncertainty.QRLifetime
 				return;
 			}
 			else {
+				// It isn't, start loading
+				loading = true;
 				paths.push(path);
 				pathIndex = paths.length - 1;
 				rows = cachedRows[pathIndex] = new Vector.<TimeTableRow>();
@@ -154,6 +160,9 @@ package org.understandinguncertainty.QRLifetime
 						
 //						trace("["+tBin+"] "+row); 
 					}
+
+					loading = false;
+					
 						
 					// dispatch completion event 
 					dispatchEvent(new Event(Event.COMPLETE));
