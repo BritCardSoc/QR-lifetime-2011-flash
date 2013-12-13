@@ -82,7 +82,7 @@ package org.understandinguncertainty.QRLifetime
 				if(i==0) {
 
 					// Note: this is original QRISK code which fails when the timeTable bin size is large since 
-					// we cannot then approxmate the death and cvd rates to zero in the first bin.
+					// we cannot then ignore the death and cvd in the first bin.
 					//
 					//	lastRow = new LifetimeRiskRow(1 - baseHazard.cvd_1 - baseHazard.death_1, 0, 0);
 					//
@@ -211,10 +211,10 @@ package org.understandinguncertainty.QRLifetime
 				if(i==0) {
 					lastRow = new LifetimeRiskRow(
 						1 - baseHazard.cvd_1 - baseHazard.death_1, 
-						baseHazard.cvd_1, // was 0, //TODO: revise to baseHazard.cvd_1?
-						baseHazard.death_1, // TODO
+						baseHazard.cvd_1, 
+						baseHazard.death_1, 
 						1 - baseHazard.cvd_1, 
-						baseHazard.cvd_1 // TODO
+						baseHazard.cvd_1 
 					);
 				}
 				else {

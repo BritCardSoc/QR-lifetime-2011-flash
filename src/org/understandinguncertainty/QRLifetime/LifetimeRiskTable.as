@@ -29,6 +29,19 @@ package org.understandinguncertainty.QRLifetime
 			return rows[index].cif_cvd;
 		}
 		
+		public function getRiskNoDeathAt(index:int):Number
+		{
+			if(rows.length > index) {
+				return rows[index].cvd_noDeath;
+			}
+			else
+				return -1;
+		}
+		
+/*		public function printTable():void {
+			for(var i=0; i < 
+		}
+*/		
 		public function getHazardAt(index:int):Number
 		{
 			if(index < 0)
