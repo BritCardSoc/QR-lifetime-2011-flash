@@ -53,7 +53,10 @@ package org.understandinguncertainty.QRLifetime
 		{
 			if(index < 0)
 				return 0;
-			return (rows[index+1].cvd_noDeath - rows[index].cvd_noDeath)/rows[index].S_noDeath;
+			if(index+1 < rows.length)
+				return (rows[index+1].cvd_noDeath - rows[index].cvd_noDeath)/rows[index].S_noDeath;
+			else
+				return -1
 		}
 	}
 }
